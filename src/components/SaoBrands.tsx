@@ -33,17 +33,17 @@ const SaoBrands = () => {
           {brands.map((brand) => (
             <div
               key={brand.name}
-              className="brand-card relative overflow-hidden rounded-xl cursor-pointer aspect-[3/4]"
+              className="brand-card sao-frame relative aspect-[3/4] cursor-pointer overflow-hidden p-2"
             >
               <img
                 src={brand.img}
                 alt={brand.name}
-                className="w-full h-full object-cover"
+                className="sao-inset-frame h-full w-full object-cover"
                 loading="lazy"
               />
-              <div className="brand-card-overlay rounded-xl">
+              <div className="brand-card-overlay rounded-[1.25rem]">
                 {brand.isNew && (
-                  <span className="absolute top-3 right-3 bg-sao-green text-foreground text-xs font-semibold px-3 py-1 rounded-full italic">
+                  <span className="sao-frame-soft absolute right-3 top-3 bg-sao-green px-3 py-1 text-xs font-semibold italic text-foreground">
                     Novinka
                   </span>
                 )}

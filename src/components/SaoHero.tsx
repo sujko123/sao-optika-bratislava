@@ -1,4 +1,4 @@
-import headingSao from '@/assets/heading-sao.png';
+import headingSao from '@/assets/sao_logo.png';
 
 const SaoHero = () => {
   return (

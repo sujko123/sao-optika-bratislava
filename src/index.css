@@ -58,10 +58,33 @@
   body {
     @apply bg-background text-foreground font-sans;
     font-family: 'Inter', sans-serif;
+    background-image:
+      radial-gradient(circle at top left, hsla(330, 50%, 88%, 0.55), transparent 28%),
+      radial-gradient(circle at bottom right, hsla(150, 100%, 74%, 0.28), transparent 30%);
   }
 }
 
 @layer utilities {
+  .sao-frame {
+    border: 2px solid hsl(var(--foreground));
+    box-shadow: 0 8px 0 hsl(var(--foreground));
+    border-radius: 1.75rem;
+    background: hsl(var(--background));
+  }
+
+  .sao-frame-soft {
+    border: 2px solid hsl(var(--foreground));
+    box-shadow: 0 5px 0 hsl(var(--foreground));
+    border-radius: 9999px;
+    background: hsl(var(--background));
+  }
+
+  .sao-inset-frame {
+    border: 2px solid hsl(var(--foreground));
+    border-radius: 1.5rem;
+    background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.96), hsla(0, 0%, 100%, 0.9));
+  }
+
   .brand-card-overlay {
     @apply absolute inset-0 flex items-center justify-center transition-all duration-500;
     background: hsla(150, 100%, 74%, 0.6);
