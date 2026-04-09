@@ -1,4 +1,5 @@
 import storeImg from '@/assets/store.jpg';
+import headingOnas from '@/assets/heading-onas.png';
 
 const SaoAbout = () => {
   return (
@@ -18,16 +19,16 @@ const SaoAbout = () => {
 
         {/* Text */}
         <div>
-          {/* Circle letters O NÁS */}
+          {/* Heading image placeholder */}
           <div className="mb-6">
-            <div className="flex flex-wrap gap-1">
-              <span className="w-10 h-10 rounded-full bg-sao-green flex items-center justify-center text-foreground font-semibold text-sm">O</span>
-            </div>
-            <div className="flex flex-wrap gap-1 mt-1">
-              <span className="w-10 h-10 rounded-full bg-sao-pink flex items-center justify-center text-foreground font-semibold text-sm">N</span>
-              <span className="w-10 h-10 rounded-full bg-sao-pink flex items-center justify-center text-foreground font-semibold text-sm">Á</span>
-              <span className="w-10 h-10 rounded-full bg-sao-pink flex items-center justify-center text-foreground font-semibold text-sm">S</span>
-            </div>
+            <img
+              src={headingOnas}
+              alt="O NÁS"
+              className="h-20 md:h-24 w-auto"
+              loading="lazy"
+              width={512}
+              height={512}
+            />
           </div>
 
           <p className="text-foreground font-semibold text-lg mb-4">Sme SAO.</p>
