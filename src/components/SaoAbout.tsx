@@ -5,11 +5,11 @@ const SaoAbout = () => {
   return (
     <section id="about" className="px-6 py-16 md:py-24">
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-16">
-        <div className="sao-frame overflow-hidden p-2">
+        <div className="overflow-hidden rounded-[1.9rem]">
           <img
             src={storeImg}
             alt="Interiér SAO Optika"
-            className="sao-inset-frame h-auto w-full object-cover"
+            className="h-auto w-full rounded-[1.9rem] border-4 border-black object-cover"
             loading="lazy"
             width={1200}
             height={800}
