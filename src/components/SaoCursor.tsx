@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import cursorPlaceholder from '@/assets/cursor-placeholder.png';
+import cursorPlaceholder from '@/assets/mouseB.png';
 
 const SaoCursor = () => {
   useEffect(() => {
@@ -14,8 +14,27 @@ const SaoCursor = () => {
     const styleElement = document.createElement('style');
     styleElement.id = styleId;
     styleElement.textContent = `
-      html, body, a, button, [role="button"] {
-        cursor: url("${cursorPlaceholder}") 12 12, auto;
+      html:not(:has(body[data-cookie-modal-open="true"])),
+      body:not([data-cookie-modal-open="true"]),
+      body:not([data-cookie-modal-open="true"]) a,
+      body:not([data-cookie-modal-open="true"]) button,
+      body:not([data-cookie-modal-open="true"]) [role="button"],
+      body:not([data-cookie-modal-open="true"]) .cursor-pointer,
+      body:not([data-cookie-modal-open="true"]) [aria-roledescription="carousel"],
+      body:not([data-cookie-modal-open="true"]) [aria-roledescription="slide"] {
+        cursor: url("${cursorPlaceholder}") 4 4, auto;
+      }
+
+      body[data-cookie-modal-open="true"],
+      body[data-cookie-modal-open="true"] * {
+        cursor: auto !important;
+      }
+
+      body[data-cookie-modal-open="true"] a,
+      body[data-cookie-modal-open="true"] button,
+      body[data-cookie-modal-open="true"] [role="button"],
+      body[data-cookie-modal-open="true"] .cursor-pointer {
+        cursor: pointer !important;
       }
     `;
 

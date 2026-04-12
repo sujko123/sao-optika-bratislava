@@ -60,6 +60,15 @@
       radial-gradient(circle at top left, hsla(330, 50%, 88%, 0.55), transparent 28%),
       radial-gradient(circle at bottom right, hsla(150, 100%, 74%, 0.28), transparent 30%);
   }
+
+  main p {
+    text-align: justify;
+    text-align-last: left;
+  }
+
+  footer p {
+    text-align: inherit;
+  }
 }
 
 @layer utilities {
@@ -118,5 +127,17 @@
   .nav-link-hover:hover {
     background-color: #ECC9E3;
     transform: scale(1.12);
+  }
+
+  @keyframes cookie-panel-in {
+    0% {
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 }

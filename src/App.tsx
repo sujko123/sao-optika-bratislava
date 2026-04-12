@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import SaoCookieBanner from '@/components/SaoCookieBanner';
 import SaoCursor from '@/components/SaoCursor';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { Toaster } from '@/components/ui/toaster';
@@ -23,7 +22,6 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-      <SaoCookieBanner />
     </TooltipProvider>
   </QueryClientProvider>
 );

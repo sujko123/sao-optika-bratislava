@@ -12,13 +12,14 @@ type CookieSettings = {
 
 const defaultSettings: CookieSettings = {
   necessary: true,
-  functional: false,
-  analytics: false,
-  marketing: false,
+  functional: true,
+  analytics: true,
+  marketing: true,
 };
 
 const SaoCookieBanner = () => {
   const [open, setOpen] = useState(false);
+  const [isBlocking, setIsBlocking] = useState(false);
   const [mode, setMode] = useState<'summary' | 'details'>('summary');
   const [settings, setSettings] = useState<CookieSettings>(defaultSettings);
 
@@ -27,6 +28,7 @@ const SaoCookieBanner = () => {
 
     if (!storedValue) {
       setOpen(true);
+      setIsBlocking(true);
       setMode('summary');
       return;
     }
@@ -39,20 +41,46 @@ const SaoCookieBanner = () => {
         analytics: Boolean(parsed.analytics),
         marketing: Boolean(parsed.marketing),
       });
+      setIsBlocking(false);
     } catch {
       setOpen(true);
+      setIsBlocking(true);
       setMode('summary');
     }
   }, []);
+
+  useEffect(() => {
+    document.body.dataset.cookieModalOpen = open && isBlocking ? 'true' : 'false';
+
+    if (!open || !isBlocking) {
+      document.body.style.overflow = '';
+      return () => {
+        delete document.body.dataset.cookieModalOpen;
+      };
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      delete document.body.dataset.cookieModalOpen;
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open, isBlocking]);
 
   const updateSetting = (key: 'functional' | 'analytics' | 'marketing') => {
     setSettings((current) => ({ ...current, [key]: !current[key] }));
   };
 
+  const closeInlinePanel = () => {
+    setOpen(false);
+    setIsBlocking(false);
+    setMode('summary');
+  };
+
   const saveSettings = () => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-    setOpen(false);
-    setMode('summary');
+    closeInlinePanel();
   };
 
   const rejectAll = () => {
@@ -62,10 +90,10 @@ const SaoCookieBanner = () => {
       analytics: false,
       marketing: false,
     };
+
     setSettings(nextSettings);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextSettings));
-    setOpen(false);
-    setMode('summary');
+    closeInlinePanel();
   };
 
   const acceptAll = () => {
@@ -75,10 +103,10 @@ const SaoCookieBanner = () => {
       analytics: true,
       marketing: true,
     };
+
     setSettings(nextSettings);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextSettings));
-    setOpen(false);
-    setMode('summary');
+    closeInlinePanel();
   };
 
   const Toggle = ({
@@ -120,7 +148,7 @@ const SaoCookieBanner = () => {
     onToggle?: () => void;
     alwaysActive?: boolean;
   }) => (
-    <div className="rounded-[16px] bg-[#f7f5f5] px-4 py-3">
+    <div className="rounded-[16px] bg-[#f7f5f5] px-4 py-3 text-left">
       <div className="flex items-center justify-between gap-4">
         <p className="text-[14px] font-medium text-[#211d1d]">{title}</p>
         {alwaysActive ? (
@@ -129,99 +157,149 @@ const SaoCookieBanner = () => {
           <Toggle checked={checked} onClick={onToggle} />
         )}
       </div>
-      <p className="mt-2 text-[13px] leading-[1.45] text-[#4f4a4a]">{description}</p>
+      <p className="mt-2 text-left text-[13px] leading-[1.45] text-[#4f4a4a]">{description}</p>
     </div>
   );
 
   return (
-    <div className="fixed bottom-5 right-5 z-[80]">
+    <div
+      className={`z-[80] ${
+        open && isBlocking
+          ? 'fixed inset-0'
+          : open
+            ? 'fixed inset-0 flex items-center justify-center p-4 lg:inset-auto lg:bottom-10 lg:right-10 lg:p-0'
+            : 'mt-3 flex justify-center lg:fixed lg:bottom-10 lg:right-10 lg:mt-0'
+      }`}
+    >
       {open ? (
-        <div className="w-[min(360px,calc(100vw-2rem))] rounded-[24px] border-[4px] border-[#211d1d] bg-white px-4 py-4">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <h3 className="text-[18px] font-bold text-[#211d1d]">Cookie Nastavenia</h3>
-              <p className="text-[14px] leading-[1.45] text-[#6a6666]">
-                Používame cookies, aby sme zlepšili váš zážitok, analyzovali návštevnosť stránky
-                a poskytovali personalizovaný obsah. Zásady ochrany osobných údajov.
-              </p>
-            </div>
-
-            {mode === 'summary' ? (
-              <div className="flex flex-wrap gap-3 pt-1">
-                <button
-                  type="button"
-                  onClick={rejectAll}
-                  className="rounded-full bg-[#211d1d] px-4 py-2 text-[13px] font-medium text-white transition-opacity hover:opacity-85"
-                >
-                  Zamietnuť
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode('details')}
-                  className="rounded-full bg-[#211d1d] px-5 py-2 text-[13px] font-medium text-white transition-opacity hover:opacity-85"
-                >
-                  Upraviť
-                </button>
-                <button
-                  type="button"
-                  onClick={acceptAll}
-                  className="rounded-full bg-[#ECC9E3] px-5 py-2 text-[13px] font-medium text-[#211d1d] transition-opacity hover:opacity-85"
-                >
-                  Akceptovať
-                </button>
+        <div
+          className={
+            open && isBlocking
+              ? 'flex min-h-screen items-center justify-center bg-[#211d1d]/45 p-4 sm:p-6 lg:items-end lg:justify-end'
+              : 'w-full lg:w-auto'
+          }
+        >
+          <div className="animate-[cookie-panel-in_220ms_ease-out] w-[min(308px,calc(100vw-1rem))] rounded-[22px] border-[4px] border-[#211d1d] bg-white px-2.5 py-2.5 shadow-[0_24px_80px_rgba(33,29,29,0.18)] sm:w-[min(360px,calc(100vw-2rem))] sm:rounded-[24px] sm:px-4 sm:py-4">
+            <div className="space-y-2.5 sm:space-y-4">
+              <div className="space-y-2 text-left">
+                <h3 className="text-[16px] font-bold text-[#211d1d] sm:text-[18px]">Cookie Nastavenia</h3>
+                <p className="text-[12px] leading-[1.35] text-[#6a6666] sm:text-[14px] sm:leading-[1.45]">
+                  Používame cookies, aby sme zlepšili váš zážitok, analyzovali návštevnosť stránky
+                  a poskytovali personalizovaný obsah.{' '}
+                  <a
+                    href="https://kalendar.saooptika.sk/zou"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer font-medium text-[#211d1d] underline underline-offset-4"
+                    >
+                    <span className="cursor-pointer">Zásady ochrany osobných údajov</span>
+                  </a>
+                </p>
               </div>
-            ) : (
-              <>
-                <div className="space-y-3">
-                  <SettingCard
-                    title="Nevyhnutné"
-                    checked={true}
-                    alwaysActive
-                    description="Nevyhnutné cookies zabezpečujú kľúčové funkcie, ako sú bezpečnosť, správa siete a dostupnosť."
-                  />
-                  <SettingCard
-                    title="Funkčné"
-                    checked={settings.functional}
-                    onToggle={() => updateSetting('functional')}
-                    description="Cookies týkajúce sa preferencií sú také, ktoré ukladajú informácie o vašich preferenciách a nastaveniach na stránkach, ktoré navštívite. Tieto cookies si zapamätajú vaše jazykové nastavenia, rozloženie stránky, témy alebo iné preferencie, aby vám mohli poskytovať prispôsobený zážitok pri ďalšej návšteve."
-                  />
-                  <SettingCard
-                    title="Analytické"
-                    checked={settings.analytics}
-                    onToggle={() => updateSetting('analytics')}
-                    description="Analytické cookies zhromažďujú informácie o tom, ako návštevníci používajú webovú stránku. Pomáhajú analyzovať návštevnosť, sledovať výkonnosť stránky a identifikovať oblasti na zlepšenie. Všetky údaje sú spracovávané anonymne."
-                  />
-                  <SettingCard
-                    title="Reklamné"
-                    checked={settings.marketing}
-                    onToggle={() => updateSetting('marketing')}
-                    description="Tieto cookies sa používajú na personalizáciu reklám podľa vašich záujmov a správania na stránke. Pomáhajú nám sledovať účinnosť reklám a ich vplyv na vaše interakcie, čím môžeme zlepšiť relevantnosť a efektivitu zobrazovaných reklamných obsahov."
-                  />
-                </div>
 
-                <button
-                  type="button"
-                  onClick={saveSettings}
-                  className="w-full rounded-full bg-[#ECC9E3] px-5 py-3 text-[16px] font-medium text-[#211d1d] transition-opacity hover:opacity-85"
-                >
-                  Uložiť
-                </button>
-              </>
-            )}
+              {mode === 'summary' ? (
+                <div className="grid grid-cols-3 gap-1.5 pt-1 sm:gap-3">
+                  <button
+                    type="button"
+                    onClick={rejectAll}
+                    className="rounded-full bg-[#211d1d] px-1.5 py-2 text-[10px] font-medium text-white transition-opacity hover:opacity-85 sm:px-4 sm:text-[13px]"
+                  >
+                    Zamietnuť
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode('details')}
+                    className="rounded-full bg-[#211d1d] px-1.5 py-2 text-[10px] font-medium text-white transition-opacity hover:opacity-85 sm:px-5 sm:text-[13px]"
+                  >
+                    Upraviť
+                  </button>
+                  <button
+                    type="button"
+                    onClick={acceptAll}
+                    className="rounded-full bg-[#ECC9E3] px-1.5 py-2 text-center text-[10px] font-medium leading-none text-[#211d1d] transition-opacity hover:opacity-85 sm:px-5 sm:text-[13px]"
+                  >
+                    Akceptovať
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-2 sm:space-y-3">
+                    <SettingCard
+                      title="Nevyhnutné"
+                      checked={true}
+                      alwaysActive
+                      description="Nevyhnutné cookies zabezpečujú základné funkcie webu, bez ktorých stránka nemôže správne fungovať."
+                    />
+                    <SettingCard
+                      title="Funkčné"
+                      checked={settings.functional}
+                      onToggle={() => updateSetting('functional')}
+                      description="Funkčné cookies si pamätajú vaše preferencie a nastavenia, aby bol web pohodlnejší pri ďalších návštevách."
+                    />
+                    <SettingCard
+                      title="Analytické"
+                      checked={settings.analytics}
+                      onToggle={() => updateSetting('analytics')}
+                      description="Analytické cookies nám pomáhajú pochopiť návštevnosť a zlepšovať výkon a obsah stránky."
+                    />
+                    <SettingCard
+                      title="Marketingové"
+                      checked={settings.marketing}
+                      onToggle={() => updateSetting('marketing')}
+                      description="Marketingové cookies slúžia na personalizáciu reklamy a vyhodnotenie relevantnosti kampaní."
+                    />
+                  </div>
+
+                  <div className="flex flex-wrap gap-3 pt-1">
+                    {!isBlocking ? (
+                      <button
+                        type="button"
+                        onClick={closeInlinePanel}
+                        className="rounded-full border border-[#211d1d] px-4 py-2 text-[13px] font-medium text-[#211d1d] transition-opacity hover:opacity-85"
+                      >
+                        Zavrieť
+                      </button>
+                    ) : null}
+                    <button
+                      type="button"
+                      onClick={saveSettings}
+                      className="rounded-full bg-[#ECC9E3] px-4 py-2 text-[14px] font-medium text-[#211d1d] transition-opacity hover:opacity-85"
+                    >
+                      Uložiť
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       ) : (
-        <button
-          type="button"
-          aria-label="Otvoriť cookie nastavenia"
-          onClick={() => {
-            setOpen(true);
-            setMode('summary');
-          }}
-          className="flex h-[52px] w-[52px] items-center justify-center rounded-[16px] bg-[#ECC9E3] text-[#211d1d] transition-transform hover:scale-[1.04]"
-        >
-          <Cookie size={20} strokeWidth={2.1} />
-        </button>
+        <>
+          <button
+            type="button"
+            aria-label="Otvorit cookie nastavenia"
+            onClick={() => {
+              setOpen(true);
+              setMode('summary');
+              setIsBlocking(true);
+            }}
+            className="hidden h-[38px] w-[52px] items-center justify-center rounded-[16px] bg-[#ECC9E3] text-[#211d1d] transition-transform duration-200 hover:scale-[1.04] active:scale-[0.96] lg:flex"
+          >
+            <Cookie size={20} strokeWidth={2.1} />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(true);
+              setMode('summary');
+              setIsBlocking(true);
+            }}
+            className="text-center text-[13px] font-medium text-[#211d1d] underline decoration-[#ECC9E3] decoration-2 underline-offset-4 transition-all duration-200 hover:opacity-70 active:scale-[0.98] lg:hidden"
+          >
+            Používame cookies pre lepší zážitok!
+          </button>
+        </>
       )}
     </div>
   );

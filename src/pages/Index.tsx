@@ -7,14 +7,14 @@ import SaoFooter from '@/components/SaoFooter';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background">
       <SaoHero />
       <SaoNav />
       <SaoAbout />
       <SaoBrands />
       <SaoEyeExam />
       <SaoFooter />
-    </div>
+    </main>
   );
 };
 

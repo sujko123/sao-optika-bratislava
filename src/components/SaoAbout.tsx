@@ -17,6 +17,7 @@ const SaoAbout = () => {
         </div>
 
         <div>
+          <h2 className="sr-only">O nas</h2>
           <div className="mb-6">
             <img
               src={headingOnas}
@@ -28,7 +29,7 @@ const SaoAbout = () => {
             />
           </div>
 
-          <p className="mb-4 text-lg font-semibold text-foreground">Sme SAO.</p>
+          <p className="mb-4 text-[18px] font-semibold text-foreground md:text-[20px]">Sme SAO.</p>
           <p className="leading-relaxed text-muted-foreground">
             Nová očná optika v srdci Bratislavy. Pokiaľ hľadáš svoje vysnívané okuliare,
             sme tu pre teba. V SAO tvoríme priestor, ktorý venuje dôležitosť prevencii

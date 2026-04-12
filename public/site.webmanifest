@@ -1,0 +1,14 @@
+{
+  "name": "SAO Optika",
+  "short_name": "SAO Optika",
+  "icons": [
+    {
+      "src": "/banner.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ECC9E3",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
