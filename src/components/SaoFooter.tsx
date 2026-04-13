@@ -12,27 +12,27 @@ const SaoFooter = () => {
     <footer id="contact" className="border-t-[2px] border-black px-6 py-16 md:py-24">
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-12 text-center md:grid-cols-[0.8fr_1.15fr_0.8fr] md:gap-10 md:text-left lg:gap-12">
         <div className="flex w-full flex-col items-center md:items-start">
-          <div className="flex w-full max-w-[11rem] flex-col items-center md:max-w-none md:items-start">
-            <h3 className="w-full text-center text-[20px] font-bold uppercase tracking-tight md:text-left">
-              OTVARACIE HODINY
+          <div className="flex w-full max-w-[11rem] flex-col items-center text-[16px] leading-[1.25] md:max-w-none md:items-start">
+            <h3 className="text-center text-[20px] font-bold uppercase tracking-tight md:text-left">
+              OTVÁRACIE HODINY
             </h3>
 
-            <div className="mt-5 flex w-full flex-col items-center gap-5 text-[16px] leading-[1.25] md:items-start">
-              <div className="w-full text-center md:text-left">
-                <p>Pondelok - Piatok</p>
-                <p>10 - 18</p>
-              </div>
+            <>
+              <>
+                <p className="mt-5 text-center md:text-left">Pondelok - Piatok</p>
+                <p className="text-center md:text-left">10 - 18</p>
+              </>
 
-              <div className="w-full text-center md:text-left">
-                <p>Sobota</p>
-                <p>10 - 13</p>
-              </div>
+              <>
+                <p className="mt-5 justify-self-center text-center md:text-left">Sobota</p>
+                <p className="justify-self-center text-center md:text-left">10 - 13</p>
+              </>
 
-              <div className="w-full text-center md:text-left">
-                <p>Nedela</p>
-                <p>Zatvorene</p>
-              </div>
-            </div>
+              <>
+                <p className="mt-5 justify-self-center text-center md:text-left">Nedeľa</p>
+                <p className="justify-self-center text-center md:text-left">Zatvorené</p>
+              </>
+            </>
           </div>
         </div>
 
@@ -59,8 +59,8 @@ const SaoFooter = () => {
             rel="noopener noreferrer"
             className={`flex w-full max-w-[18rem] flex-col items-center text-center text-[16px] leading-[1.18] text-foreground ${hoverLinkClass}`}
           >
-            <p className="w-full text-center">SAO Optika Bratislava</p>
-            <p className="w-full text-center">Palisady 736/46, 811 06 Slovensko</p>
+            <p className="text-center">SAO Optika Bratislava</p>
+            <p className="text-center">Palisády 736/46, 811 06 Bratislava</p>
           </a>
         </div>
 
@@ -73,7 +73,7 @@ const SaoFooter = () => {
             height={128}
           />
 
-          <p className="hidden max-w-xs text-[15px] md:block">"Vidiet jasnejsie, zit krajsie"</p>
+          <p className="hidden max-w-xs text-[15px] md:block">"Vidieť jasnejšie, žiť krajšie"</p>
 
           <div className="space-y-2 text-[16px] leading-[1.25]">
             <a href="tel:+421944945636" className={`block ${hoverLinkClass}`}>

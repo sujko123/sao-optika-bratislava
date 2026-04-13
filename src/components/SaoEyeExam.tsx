@@ -64,14 +64,14 @@ const SaoEyeExam = () => {
             <p className="mb-2 font-semibold text-foreground">
               Objednaj sa ešte dnes a dopraj svojmu zraku starostlivosť, akú si zaslúži!
             </p>
-            <p className="text-sm text-muted-foreground">* Cena vysetrenia je 50 EUR</p>
+            <p className="text-sm text-muted-foreground">* Cena vyšetrenia je 50 EUR</p>
           </div>
 
           <div className="order-1 mx-auto w-full max-w-[20rem] overflow-hidden rounded-[1.9rem] border-[4px] border-[#ECC9E3] md:order-2 md:max-w-none">
             <div className="aspect-[4/4.35] md:aspect-[5/4]">
               <img
                 src={eyeExamImg2}
-                alt="Vysetrenie zraku"
+                alt="Vyšetrenie zraku"
                 className="h-full w-full object-cover object-center"
                 loading="lazy"
                 width={544}

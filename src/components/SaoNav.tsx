@@ -32,7 +32,9 @@ const SaoNav = () => {
           ))}
 
           <button
-           onClick={() => window.location.href = 'https://kalendar.saooptika.sk/terminy'}
+            onClick={() => {
+              window.location.href = 'https://kalendar.saooptika.sk/terminy';
+            }}
             className="inline-flex items-center justify-center rounded-full bg-[#71F6A5] px-6 py-3 text-[14px] font-medium uppercase tracking-normal text-foreground transition-all duration-200 hover:scale-[1.07]"
           >
             OBJEDNAŤ SA
@@ -45,7 +47,7 @@ const SaoNav = () => {
       </div>
 
       {mobileOpen && (
-        <div className="mx-auto mt-3 flex max-w-6xl flex-col items-center gap-6 bg-background/95 px-6 py-8 md:hidden">
+        <div className="mx-auto mt-0 flex max-w-6xl flex-col items-center gap-6 bg-background/95 px-6 py-8 md:hidden">
           {navItems.map((item) => (
             <button
               key={item.label}
@@ -57,7 +59,9 @@ const SaoNav = () => {
           ))}
 
           <button
-            onClick={() => scrollTo('#contact')}
+            onClick={() => {
+              window.location.href = 'https://kalendar.saooptika.sk/terminy';
+            }}
             className="inline-flex items-center justify-center rounded-full bg-[#71F6A5] px-6 py-3 text-[14px] font-medium uppercase tracking-normal text-foreground transition-all duration-200 hover:scale-[1.07]"
           >
             OBJEDNAŤ SA

@@ -1,16 +1,9 @@
 import { Cookie } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const STORAGE_KEY = 'sao-cookie-consent';
+import { persistCookieConsent, readCookieConsent, type CookieConsentSettings } from '@/lib/cookieConsent';
 
-type CookieSettings = {
-  necessary: true;
-  functional: boolean;
-  analytics: boolean;
-  marketing: boolean;
-};
-
-const defaultSettings: CookieSettings = {
+const defaultSettings: CookieConsentSettings = {
   necessary: true,
   functional: true,
   analytics: true,
@@ -21,32 +14,20 @@ const SaoCookieBanner = () => {
   const [open, setOpen] = useState(false);
   const [isBlocking, setIsBlocking] = useState(false);
   const [mode, setMode] = useState<'summary' | 'details'>('summary');
-  const [settings, setSettings] = useState<CookieSettings>(defaultSettings);
+  const [settings, setSettings] = useState<CookieConsentSettings>(defaultSettings);
 
   useEffect(() => {
-    const storedValue = window.localStorage.getItem(STORAGE_KEY);
+    const storedSettings = readCookieConsent();
 
-    if (!storedValue) {
+    if (!storedSettings) {
       setOpen(true);
       setIsBlocking(true);
       setMode('summary');
       return;
     }
 
-    try {
-      const parsed = JSON.parse(storedValue) as Partial<CookieSettings>;
-      setSettings({
-        necessary: true,
-        functional: Boolean(parsed.functional),
-        analytics: Boolean(parsed.analytics),
-        marketing: Boolean(parsed.marketing),
-      });
-      setIsBlocking(false);
-    } catch {
-      setOpen(true);
-      setIsBlocking(true);
-      setMode('summary');
-    }
+    setSettings(storedSettings);
+    setIsBlocking(false);
   }, []);
 
   useEffect(() => {
@@ -79,12 +60,12 @@ const SaoCookieBanner = () => {
   };
 
   const saveSettings = () => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    persistCookieConsent(settings);
     closeInlinePanel();
   };
 
   const rejectAll = () => {
-    const nextSettings: CookieSettings = {
+    const nextSettings: CookieConsentSettings = {
       necessary: true,
       functional: false,
       analytics: false,
@@ -92,12 +73,12 @@ const SaoCookieBanner = () => {
     };
 
     setSettings(nextSettings);
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextSettings));
+    persistCookieConsent(nextSettings);
     closeInlinePanel();
   };
 
   const acceptAll = () => {
-    const nextSettings: CookieSettings = {
+    const nextSettings: CookieConsentSettings = {
       necessary: true,
       functional: true,
       analytics: true,
@@ -105,7 +86,7 @@ const SaoCookieBanner = () => {
     };
 
     setSettings(nextSettings);
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextSettings));
+    persistCookieConsent(nextSettings);
     closeInlinePanel();
   };
 
@@ -182,7 +163,7 @@ const SaoCookieBanner = () => {
           <div className="animate-[cookie-panel-in_220ms_ease-out] w-[min(308px,calc(100vw-1rem))] rounded-[22px] border-[4px] border-[#211d1d] bg-white px-2.5 py-2.5 shadow-[0_24px_80px_rgba(33,29,29,0.18)] sm:w-[min(360px,calc(100vw-2rem))] sm:rounded-[24px] sm:px-4 sm:py-4">
             <div className="space-y-2.5 sm:space-y-4">
               <div className="space-y-2 text-left">
-                <h3 className="text-[16px] font-bold text-[#211d1d] sm:text-[18px]">Cookie Nastavenia</h3>
+                <h3 className="text-[16px] font-bold text-[#211d1d] sm:text-[18px]">Cookie nastavenia</h3>
                 <p className="text-[12px] leading-[1.35] text-[#6a6666] sm:text-[14px] sm:leading-[1.45]">
                   Používame cookies, aby sme zlepšili váš zážitok, analyzovali návštevnosť stránky
                   a poskytovali personalizovaný obsah.{' '}
@@ -191,7 +172,7 @@ const SaoCookieBanner = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="cursor-pointer font-medium text-[#211d1d] underline underline-offset-4"
-                    >
+                  >
                     <span className="cursor-pointer">Zásady ochrany osobných údajov</span>
                   </a>
                 </p>
@@ -277,7 +258,7 @@ const SaoCookieBanner = () => {
         <>
           <button
             type="button"
-            aria-label="Otvorit cookie nastavenia"
+            aria-label="Otvoriť cookie nastavenia"
             onClick={() => {
               setOpen(true);
               setMode('summary');
