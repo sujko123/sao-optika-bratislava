@@ -197,7 +197,7 @@ const SaoCookieBanner = () => {
                   <button
                     type="button"
                     onClick={acceptAll}
-                    className="rounded-full bg-[#ECC9E3] px-1.5 py-2 text-center text-[10px] font-medium leading-none text-[#211d1d] transition-opacity hover:opacity-85 sm:px-5 sm:text-[13px]"
+                    className="rounded-full bg-[#ECC9E3] px-1.5 py-2 text-center text-[10px] font-medium leading-none text-[#211d1d] transition-opacity hover:opacity-85  sm:text-[13px]"
                   >
                     Akceptovať
                   </button>
